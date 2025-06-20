@@ -283,7 +283,7 @@ packages:
 
   debug:
     url: https://github.com/dlarue/esphome-yambms
-    ref: dev
+    ref: main
     refresh: 0s
     files:
       - path: packages/base/device_debug_ESP32.yaml
