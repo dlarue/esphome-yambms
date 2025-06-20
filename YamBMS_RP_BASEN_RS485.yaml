@@ -35,7 +35,7 @@
 #     dns2: 8.8.4.4
 
 logger:
-  level: INFO # VERBOSE / DEBUG / INFO / WARN
+  level: VERBOSE # VERBOSE / DEBUG / INFO / WARN
 
 ota:
   platform: esphome
@@ -129,15 +129,15 @@ packages:
   ############### >>>   ONLY ONE BOARD !   <<< ###############
 
   board:
-    url: https://github.com/Sleeper85/esphome-yambms
-    ref: main
+    url: https://github.com/dlarue/esphome-yambms
+    ref: dev
     refresh: 0s
     files:
       # - path: 'packages/board/board_ESP32_Generic.yaml'
-      # - path: 'packages/board/board_ESP32_DevKit-V1.yaml'
+      - path: 'packages/board/board_ESP32_DevKit-V1.yaml'
       # - path: 'packages/board/board_ESP32_Atom-Lite.yaml'
       # - path: 'packages/board/board_ESP32_EVB.yaml'
-      - path: 'packages/board/board_ESP32_LilyGo-T-CAN485.yaml'
+      #- path: 'packages/board/board_ESP32_LilyGo-T-CAN485.yaml'
       # - path: 'packages/board/board_ESP32-C3_DevKitM-1.yaml'
       # - path: 'packages/board/board_ESP32-C3_ETH01-EVO.yaml'
       # - path: 'packages/board/board_ESP32-S3_AtomS3-Lite.yaml'
@@ -173,8 +173,8 @@ packages:
   ########### >>> UNCOMMENT YOUR BOARD OPTIONS <<< ###########
 
   board_options:
-    url: https://github.com/Sleeper85/esphome-yambms
-    ref: main
+    url: https://github.com/dlarue/esphome-yambms
+    ref: dev
     refresh: 0s
     files:
       # UART 1
@@ -185,14 +185,14 @@ packages:
       # - path: 'packages/board/board_options_itf_uart_esp_3.yaml'
 
       # ESP32_CAN (TJA105x, SN65HVD230, M5Stack CAN base/unit)
-      - path: 'packages/board/board_options_itf_canbus_esp32_can.yaml'
-        vars:
-          canbus_node_id: 'canbus_inverter_1'
-
-      # MCP2515
-      # - path: 'packages/board/board_options_itf_canbus_mcp2515.yaml'
+      # - path: 'packages/board/board_options_itf_canbus_esp32_can.yaml'
       #   vars:
       #     canbus_node_id: 'canbus_inverter_1'
+
+      # MCP2515
+      - path: 'packages/board/board_options_itf_canbus_mcp2515.yaml'
+        vars:
+          canbus_node_id: 'canbus_inverter_1'
 
   ############################################################
 
@@ -226,8 +226,8 @@ packages:
   #         shunt_encryption_key: '0df4d0395b7d1a876c0c33ecb9e70dcd' # Your encryption key
 
   bms:
-    url: https://github.com/Sleeper85/esphome-yambms
-    ref: main
+    url: https://github.com/dlarue/esphome-yambms
+    ref: dev
     refresh: 0s
     files:
       # Basen controller
@@ -248,17 +248,23 @@ packages:
           bms_id: '2' # must be a number
           bms_name: 'BASEN-BMS 2'
           bms_address: '0x02'
+      # Basen module 3
+      - path: packages/bms/bms_combine_BASEN_RS485_full.yaml
+        vars:
+          bms_id: '3' # must be a number
+          bms_name: 'BASEN-BMS 3'
+          bms_address: '0x03'
 
   yambms:
-    url: https://github.com/Sleeper85/esphome-yambms
-    ref: main
+    url: https://github.com/dlarue/esphome-yambms
+    ref: dev
     refresh: 0s
     files:
       - path: 'packages/yambms/yambms.yaml'
 
   canbus:
-    url: https://github.com/Sleeper85/esphome-yambms
-    ref: main
+    url: https://github.com/dlarue/esphome-yambms
+    ref: dev
     refresh: 0s
     files:
       - path: 'packages/yambms/yambms_canbus.yaml'
@@ -276,11 +282,52 @@ packages:
 # +--------------------------------------+
 
   debug:
-    url: https://github.com/Sleeper85/esphome-yambms
-    ref: main
+    url: https://github.com/dlarue/esphome-yambms
+    ref: dev
     refresh: 0s
     files:
       - path: packages/base/device_debug_ESP32.yaml
         vars:
           debug_name: 'Debug'
           debug_update_interval: '5s'
+
+# substitutions:
+#   name: esphome-basen
+#   device_description: "Monitor three Basengreen BMSs via RS485"
+
+# esphome:
+#   name: ${name}
+#   comment: ${device_description}
+#   friendly_name: BasenBMS
+
+# esp32:
+#   board: esp32dev
+#   framework:
+#     type: esp-idf
+    
+# external_components:
+  #- source: github://GHswitt/esphome-basen@main
+#   - source: github://dlarue/esphome-basen@dev
+
+# Enable logging
+# logger:
+
+# Enable Home Assistant API
+# api:
+#   encryption:
+#     key: "paEok4LQWWLDbCakFY1giE70hBbbrVUZEFAIVvWseGM="
+
+# ota:
+#   - platform: esphome
+#     password: "e52db683d65e72af887f7899fff9849b"
+
+wifi:
+  ssid: !secret wifi_ssid
+  password: !secret wifi_password
+
+  # Enable fallback hotspot (captive portal) in case wifi connection fails
+#   ap:
+#     ssid: "Yambms Fallback Hotspot"
+#     password: "3lNwqwVrDHY4"
+
+# captive_portal:
