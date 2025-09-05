@@ -63,7 +63,7 @@ light:
     id: esp_light
     # name: ${name} ESP32 Light
     rgb_order: GRB
-    pin: 2
+    pin: 14
     num_leds: 1
     # rmt_channel: 0
     chipset: ws2812
