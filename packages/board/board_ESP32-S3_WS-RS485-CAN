@@ -1,0 +1,72 @@
+# Updated : 2025.09.5
+# Version : 1.0.0
+# GitHub  : https://github.com/Sleeper85/esphome-yambms
+
+# YamBMS ( Yet another multi-BMS Merging Solution )
+
+# This YAML is free software: you can redistribute it and/or
+# modify it under the terms of the GNU General Public License
+# as published by the Free Software Foundation, either version 3
+# of the License, or (at your option) any later version.
+#
+# This program is distributed in the hope that it will be useful,
+# but WITHOUT ANY WARRANTY; without even the implied warranty of
+# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
+# See the GNU General Public License for more details.
+#
+# You should have received a copy of the GNU General Public License
+# along with this program. If not, see <http://www.gnu.org/licenses/gpl.html>.
+
+# https://www.waveshare.com/wiki/ESP32-S3-RS485-CAN
+
+substitutions:
+  board_chip: "ESP32-S3"
+  board_name: "Waveshare RS485-CAN"
+  # Interfaces GPIOs
+  # uart_esp_1: RS232
+  tx_pin_1: '1'
+  rx_pin_1: '2'
+  # uart_esp_2: RS485
+  tx_pin_2: '17'
+  rx_pin_2: '18'
+  # canbus_esp32_can: CAN
+  tx_pin_4: '15'
+  rx_pin_4: '16'
+
+packages:
+  device_base: !include ../base/device_base.yaml
+  device_base_wifi: !include ../base/device_base_wifi.yaml
+
+esp32:
+  board: esp32-s3-devkitc-1
+  variant: esp32s3
+  flash_size: 16MB # ajust according to your ESP32-S3 version
+  cpu_frequency: 240MHz
+  framework:
+    type: esp-idf
+
+esphome:
+  platformio_options:
+    board_build.flash_mode: dio             # use Dual IO (dio) instead of Quad IO (qio) to prevent boot loop after flashing
+
+wifi:
+  id: my_network
+  ssid: !secret wifi_ssid
+  password: !secret wifi_password
+  domain: !secret domain
+
+# ESPHome does not support W5500 and other SPI devices at the same SPI bus:
+# https://github.com/esphome/esphome/discussions/6720
+# ethernet:
+#   id: my_network
+#   type: W5500
+#   clk_pin: 12
+#   mosi_pin: 11
+#   miso_pin: 13
+#   cs_pin: 10
+#   interrupt_pin: 9
+#   reset_pin: 48
+#   clock_speed: 40MHz
+
+logger:
+  baud_rate: 0 # frees the 3rd UART and avoids some bugs like "WK2168 with canbus" or "BLE client with RS485 modbus"
