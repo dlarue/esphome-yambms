@@ -27,7 +27,7 @@ substitutions:
 # +--------------------------------------+
 
 external_components:
-  - source: github://GHswitt/esphome-basen@dev
+  - source: github://GHswitt/esphome-basen@main
     refresh: 0s
 
 uart:
